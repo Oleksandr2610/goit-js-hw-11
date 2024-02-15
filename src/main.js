@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     gallery.innerHTML = '';
 
     fetch(
-      `https://pixabay.com/api/?key=42026920-e619b387ca2127f1aff40b8e2&q=${userInput}&image_type=photo&orientation=horizontal&safesearch=true`
+      `https://pixabay.com/api/?key==${userInput}&image_type=photo&orientation=horizontal&safesearch=true`
     )
       .then(response => response.json())
       .then(data => handleResponse(data))
