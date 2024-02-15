@@ -4,33 +4,24 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vanilla App Template</title>
+
     <link rel="stylesheet" href="./css/styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <section class="container">
-      <form action="GET" method="get" id="form">
-        <label for="search">
-          <input
-            type="search"
-            name="search"
-            id="search"
-            placeholder="Search images..."
-          />
-        </label>
-        <button type="submit" class="submit-btn">Search</button>
+    <div>
+      <form action="" class="form">
+        <input type="text" placeholder="Search images..." />
+        <button type="submit" class="btn">Search</button>
       </form>
-      <span class="loader"></span>
-    </section>
-    <ul class="gallery"></ul>
-    <div class="gallery">
-      <a href="images/image1.jpg"
-        ><img src="images/thumbs/thumb1.jpg" alt="" title=""
-      /></a>
-      <a href="images/image2.jpg"
-        ><img src="images/thumbs/thumb2.jpg" alt="" title="Beautiful Image"
-      /></a>
+      <ul class="gallery"></ul>
     </div>
+
     <script type="module" src="./main.js"></script>
   </body>
 </html>

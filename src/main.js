@@ -1,78 +1,89 @@
-import iziToast from 'izitoast';
-import 'izitoast/dist/css/iziToast.min.css';
+import iziToast from "izitoast";
+import "izitoast/dist/css/iziToast.min.css";
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
-const form = document.querySelector('#form');
-const loader = document.querySelector('.loader');
-const gallery = document.querySelector('.gallery');
 
-const options = {
-  captions: true,
-  captionSelector: 'img',
-  captionType: 'attr',
-  captionsData: 'alt',
-  captionPosition: 'bottom',
-  animation: 250,
-  widthRatio: 0.9,
-  scaleImageToRatio: true,
+const form = document.querySelector(".form");
+const gallery = document.querySelector(".gallery");
+const container = document.querySelector("div");
+const inputDate = document.querySelector("input");
+
+
+
+const showLoader = () => {
+  const loader = document.createElement('span');
+  loader.classList.add('loader');
+  container.append(loader);
 };
 
-loader.style.display = 'none';
+const hideLoader = () => {
+  const loader = document.querySelector('.loader');
+  if (loader) {
+    loader.remove();
+  }
+};
 
-document.addEventListener('DOMContentLoaded', () => {
-  form.addEventListener('submit', event => {
-    event.preventDefault();
+form.addEventListener("submit", (event) => {
+  showLoader();
+   gallery.innerHTML = "";
+   event.preventDefault();
+   const searchTerm = inputDate.value;
+   searchImages(searchTerm);
+    
+});
 
-    const userInput = document.getElementById('search').value.trim();
-
-    if (!userInput) {
-      return;
-    }
-
-    loader.style.display = 'inline-block';
-    gallery.innerHTML = '';
-
-    fetch(
-      `https://pixabay.com/api/?key=42388877-3495a5887069e197b21e35383=${userInput}&image_type=photo&orientation=horizontal&safesearch=true`
-    )
-      .then(response => response.json())
-      .then(data => handleResponse(data))
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      })
-      .finally(() => {
-        loader.style.display = 'none';
-      });
-  });
-
-  function handleResponse(data) {
-    if (data.hits.length === 0) {
-      iziToast.error({
-        title: '',
-        backgroundColor: '#EF4040',
-        message:
-          'Sorry, there are no images matching your search query. Please try again!',
-        position: 'topRight'
-      });
-    } else {
-      const markup = data.hits
-        .map(data => {
-          return `<li class="gallery-item"><a href="${data.webformatURL}">
+function searchImages(searchTerm) {
+  const apiKey = '41764579-b97d65b31c0abd4efd9d4830e';
+  const url = `https://pixabay.com/api/?key=${apiKey}&q=${searchTerm}&image_type=photo&orientation=horizontal&safesearch=true`;
+  fetch(url)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(response.status);
+      } else {
+        return response.json();
+      }
+    })
+    .then(data => {
+      if (data.hits.length === 0) {
+        iziToast.error({
+          message: 'Sorry, there are no images matching <br>your search query. Please try again!</br>',
+          position: 'center',
+          transitionIn: "fadeInLeft",
+        });
+        hideLoader()
+      } else {
+        
+        const markup = data.hits
+          .map(data => {
+            return `
+            <li class="gallery-item"><a href="${data.largeImageURL}">
           <img class="gallery-image" src="${data.webformatURL}" alt="${data.tags}"></a>
-          <div class='comments'>
           <p><b>Likes: </b>${data.likes}</p>
           <p><b>Views: </b>${data.views}</p>
           <p><b>Comments: </b>${data.comments}</p>
           <p><b>Downloads: </b>${data.downloads}</p>
-          </div>
           </li>`;
-        })
-        .join('');
-      gallery.insertAdjacentHTML('afterbegin', markup);
-      const lightbox = new SimpleLightbox('.gallery a', options);
-      lightbox.refresh();
-      form.reset();
-    }
-  }
-});
+          }).join('');
+        
+        gallery.insertAdjacentHTML("beforeend", markup);
+        const lightbox = new SimpleLightbox('.gallery a', {
+          captions: true,
+          captionType: 'attr',
+          captionsData: 'alt',
+          captionPosition: 'bottom',
+          fadeSpeed: 150,
+          captionSelector: "img",
+          captionDelay: 250,
+        });
+
+        lightbox.on('show.simplelightbox').refresh();
+        hideLoader();
+      }
+    })
+    .catch((error) => console.log(error));
+   
+};
+
+
+
