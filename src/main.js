@@ -10,7 +10,6 @@ const container = document.querySelector("div");
 const inputDate = document.querySelector("input");
 
 
-
 const showLoader = () => {
   const loader = document.createElement('span');
   loader.classList.add('loader');
