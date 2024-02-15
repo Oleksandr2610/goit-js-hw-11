@@ -9,7 +9,7 @@ const gallery = document.querySelector(".gallery");
 const container = document.querySelector("div");
 const inputDate = document.querySelector("input");
 
-
+nf
 
 const showLoader = () => {
   const loader = document.createElement('span');
